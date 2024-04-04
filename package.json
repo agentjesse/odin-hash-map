@@ -1,0 +1,26 @@
+{
+  "name": "odin-merge-sort",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "recursion example / merge sort project",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentjesse/odin-merge-sort.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agentjesse/odin-merge-sort/issues"
+  },
+  "homepage": "https://github.com/agentjesse/odin-merge-sort#readme",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
+  }
+}
