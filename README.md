@@ -1,4 +1,4 @@
-# odin-merge-sort
+# odin-hash-map
 ---
 this project is a modified 'webpack-odin-boilerplate' template repository to run
 index.js with the node command in terminal. Done with few changes to

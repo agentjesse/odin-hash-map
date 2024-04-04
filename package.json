@@ -1,23 +1,23 @@
 {
-  "name": "odin-merge-sort",
+  "name": "odin-hash-map",
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "description": "recursion example / merge sort project",
+  "description": "hash map odin project",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agentjesse/odin-merge-sort.git"
+    "url": "git+https://github.com/agentjesse/odin-hash-map.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/agentjesse/odin-merge-sort/issues"
+    "url": "https://github.com/agentjesse/odin-hash-map/issues"
   },
-  "homepage": "https://github.com/agentjesse/odin-merge-sort#readme",
+  "homepage": "https://github.com/agentjesse/odin-hash-map#readme",
   "devDependencies": {
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
