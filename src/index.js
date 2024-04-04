@@ -28,7 +28,8 @@ const makeHashMap = ()=> {
 
   //fn to set key value pair in bucket
   const set = (key, value)=> {
-    const storingIndex = getHashCode(key)
+    const storingIndex = getHashCode(key) % 16; //todo: apply modulo during hashing
+    buckets[storingIndex] = value;
   };
 
   return {
@@ -37,7 +38,8 @@ const makeHashMap = ()=> {
 };
 
 //-----------testing
-const namesAndItems = [
+//customer/item key/value pairs for testing:
+const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
   ['Emily Johnson', 'Bottled Water'],
   ['Michael Williams', 'Rice'],
@@ -59,7 +61,9 @@ const namesAndItems = [
   ['Samuel Robinson', 'Orange Juice'],
   ['Ella Lee', 'Salmon']
 ];
-lg( getHashCode( namesAndItems[0][0] ) );
-// lg( getHashCode( 'JohnSmith' ) ); //hashing fn test
-// lg( getHashCode( 'SmithJohn' ) ); //hashing fn test
-lg( makeHashMap() );
+lg( `'John Smith' hash: ${  getHashCode( namesAndCartItemsArr[0][0] )}` ); //hash fn test from string key
+// lg( getHashCode( 'JohnSmith' ) ); //hash fn test: no space
+// lg( getHashCode( 'SmithJohn' ) ); //hash fn test: permutation
+const namesAndCartItemsMap = makeHashMap();
+namesAndCartItemsMap.set( namesAndCartItemsArr[0][0], namesAndCartItemsArr[0][1] );
+lg( namesAndCartItemsMap );
