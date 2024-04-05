@@ -1,12 +1,12 @@
 /* Next task:
-- when you get to the point of storing key-value pairs in buckets, keep a set or array with them for methods like has()=boolean
+-
 
 -linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
 
 */
 
 //Imports
-//For Node.js, when importing local modules, include the file extension in the import statement.
+//For Node.js, when importing local modules, include the file extension in the import statement
 import { logToConsole as lg, tableToConsole as tb } from './logger.js'; //shorthand loggers
 import makeLinkedList from './linkedList.js'; //default import example
 
@@ -27,6 +27,7 @@ const getHashCode = (key, capacity)=> {
 const makeHashMap = ()=> {
   //start with default size of 16 buckets. todo: implement array growth
   let buckets = new Array(16); //or use Array.from() for mapping fn if needed
+  const keySet = new Set();
   const loadFactor = 0.75; //for todo above
 
   //fn to set key-value pair in bucket
@@ -34,23 +35,26 @@ const makeHashMap = ()=> {
     const bucketIndex = getHashCode(key, buckets.length);
     // lg( `bucketIndex: ${ bucketIndex }` );
 
-    //create or append linked list
-    if ( buckets[bucketIndex] === undefined ) { //when bucket empty
-      const newLinkedList = makeLinkedList(); //make linked list
-      newLinkedList.append( [key, value] ); //add node. value = key-value pair array
-      buckets[bucketIndex] = newLinkedList;
-      // lg( `stored value in bucket: ${ bucketIndex }` );
-    } else { //when linked list already exists in bucket...
-      //handle collision by appending
-      //todo: need to handle updating old keys
-
-
-
-
-
-
-      
-      buckets[bucketIndex].append( [key, value] );
+    //Check if key already exists
+    if ( keySet.has(key)) { //when key exists, get to entry node and update it's value
+      let currentNode = buckets[bucketIndex].getHead();
+      while ( currentNode ) {
+        if ( currentNode.value[0] === key ) {
+          currentNode.value[1] = value;
+          return;
+        }
+        currentNode = currentNode.next;
+      }
+    } else { //new keys: create new entry and key in keySet
+      keySet.add(key); //add key to set
+      //create or append linked list
+      if ( buckets[bucketIndex] === undefined ) { //when bucket empty
+        const newLinkedList = makeLinkedList(); //make linked list
+        newLinkedList.append( [key, value] ); //add node. value = key-value pair array
+        buckets[bucketIndex] = newLinkedList;
+      } else { //handle collisions by appending
+        buckets[bucketIndex].append( [key, value] );
+      }
     }
 
   };
@@ -78,7 +82,6 @@ const makeHashMap = ()=> {
 //customer-item key-value pairs for testing:
 const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
-  ['John Smith', 'OVERWRITE_TEST'],
   ['Emily Johnson', 'Bottled Water'],
   ['Michael Williams', 'Rice'],
   ['Emma Jones', 'Chicken Breasts'],
@@ -91,6 +94,7 @@ const namesAndCartItemsArr = [
   ['Daniel Anderson', 'Cheese'],
   ['Mia Thomas', 'Bread'],
   ['David Jackson', 'Pasta'],
+  ['David Jackson', 'UPDATE_OVERWRITE_TEST_VALUE'],
   ['Ava White', 'Tomatoes'],
   ['Joseph Harris', 'Ground Beef'],
   ['Charlotte Martinez', 'Coffee'],
