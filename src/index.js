@@ -76,7 +76,7 @@ const makeHashMap = ()=> {
   //fn to remove entry from hash map using key and return true. return false for missing key
   const remove = (key)=> {
     if ( !keySet.has(key) ) return false; //return false if key not in keySet
-    //if key exists, need to remove its node from its linked list
+    //if key exists: remove its node from its linked list, and key from keySet
     const bucketIndex = getHashCode(key, buckets.length);
     let currentNode = buckets[bucketIndex].getHead();
     let currentIndex = 0;
@@ -84,6 +84,7 @@ const makeHashMap = ()=> {
       if ( currentNode.value[0] === key ) {
         //use linked list node removal method
         buckets[bucketIndex].removeAt(currentIndex);
+        keySet.delete(key);
         return true;
       }
       currentIndex++;
@@ -94,6 +95,9 @@ const makeHashMap = ()=> {
   //fn to take key and return boolean based on key's existence in the hash map.
   //Checking the JS Set object instead of doing expensive linked list traversals
   const has = (key)=> keySet.has(key);
+
+  //fn to return total keys in hash map
+  const length = ()=> keySet.size;
 
   //basic visualization fn
   const visualizeHashMap = ()=> {
@@ -114,11 +118,13 @@ const makeHashMap = ()=> {
     get,
     has,
     remove,
+    length,
   };
 };
 
 //-----------testing
 //customer-item key-value pairs for testing:
+//30 + 1 for overwrite / update set() testing
 const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
   ['Emily Johnson', 'Bottled Water'],
@@ -165,3 +171,4 @@ namesAndCartItemsHashMap.visualizeHashMap();
 lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
 lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
 lg( `Entry for Olivia Davis key removed from hash map?: ${ namesAndCartItemsHashMap.remove('Olivia Davis') }` );
+lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
