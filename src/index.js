@@ -1,5 +1,5 @@
 /* Next task:
-- implement get(key) fn
+- implement: has(key)
 
 -linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
 
@@ -74,6 +74,10 @@ const makeHashMap = ()=> {
     }
   };
 
+  //fn to take key and return boolean based on key's existence in the hash map.
+  //Checking the JS Set object instead of doing expensive linked list traversals
+  const has = (key)=> keySet.has(key);
+
   //basic visualization fn
   const visualizeHashMap = ()=> {
     lg('\n\nhashmap visualization: ');
@@ -91,6 +95,7 @@ const makeHashMap = ()=> {
     visualizeHashMap,
     set,
     get,
+    has,
   };
 };
 
@@ -141,4 +146,4 @@ namesAndCartItemsArr.forEach( ([key, value])=> {
 namesAndCartItemsHashMap.visualizeHashMap();
 //get value of key Lucas Young
 lg( `Lucas Young's cart item: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
-//
+lg( `Ava white key in hash map: ${ namesAndCartItemsHashMap.has('Ava White') }` );
