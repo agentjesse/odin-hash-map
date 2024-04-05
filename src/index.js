@@ -1,5 +1,5 @@
 /* Next task:
-- implement: has(key)
+- implement:
 
 -linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
 
@@ -61,8 +61,7 @@ const makeHashMap = ()=> {
 
   // fn to get value from key
   const get = (key)=> {
-    //return early if key not in keySet
-    if ( !keySet.has(key) ) return null;
+    if ( !keySet.has(key) ) return null; //return early if key not in keySet
     //if key exists, traverse to its node and return its value
     const bucketIndex = getHashCode(key, buckets.length);
     let currentNode = buckets[bucketIndex].getHead();
@@ -70,6 +69,24 @@ const makeHashMap = ()=> {
       if ( currentNode.value[0] === key ) {
         return currentNode.value[1];
       }
+      currentNode = currentNode.next;
+    }
+  };
+
+  //fn to remove entry from hash map using key and return true. return false for missing key
+  const remove = (key)=> {
+    if ( !keySet.has(key) ) return false; //return false if key not in keySet
+    //if key exists, need to remove its node from its linked list
+    const bucketIndex = getHashCode(key, buckets.length);
+    let currentNode = buckets[bucketIndex].getHead();
+    let currentIndex = 0;
+    while ( currentNode ) { //simple linked list node traversal loop
+      if ( currentNode.value[0] === key ) {
+        //use linked list node removal method
+        buckets[bucketIndex].removeAt(currentIndex);
+        return true;
+      }
+      currentIndex++;
       currentNode = currentNode.next;
     }
   };
@@ -96,6 +113,7 @@ const makeHashMap = ()=> {
     set,
     get,
     has,
+    remove,
   };
 };
 
@@ -144,6 +162,6 @@ namesAndCartItemsArr.forEach( ([key, value])=> {
 } );
 //visualize hash map
 namesAndCartItemsHashMap.visualizeHashMap();
-//get value of key Lucas Young
-lg( `Lucas Young's cart item: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
-lg( `Ava white key in hash map: ${ namesAndCartItemsHashMap.has('Ava White') }` );
+lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
+lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
+lg( `Entry for Olivia Davis key removed from hash map?: ${ namesAndCartItemsHashMap.remove('Olivia Davis') }` );

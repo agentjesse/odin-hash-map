@@ -129,7 +129,7 @@ const makeLinkedList = (head = null, tail = null)=> {
 
   // remove node at index
   const removeAt = (removalIndex)=> {
-    lg( 'index of node to remove: ' + removalIndex );
+    // lg( 'index of node to remove: ' + removalIndex );
     // throw error if the list does not have the indexed space created, like
     // trying to remove 0 on an empty list, or to an index past the last index.
     if ( removalIndex < 0 || removalIndex >= getSize() ) {
