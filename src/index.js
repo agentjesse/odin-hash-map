@@ -7,7 +7,7 @@
 
 //Imports
 //For Node.js, when importing local modules, include the file extension in the import statement
-import { logToConsole as lg, tableToConsole as tb } from './logger.js'; //shorthand loggers
+import { logToConsole as lg } from './logger.js'; //shorthand loggers
 import makeLinkedList from './linkedList.js'; //default import example
 
 //string hashing fn returns hashcode which is also bucket address. Passing in bucket

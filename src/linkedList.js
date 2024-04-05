@@ -1,5 +1,5 @@
 //For Node.js, when importing local modules, include the file extension in the import statement.
-import { logToConsole as lg, tableToConsole as tb } from './logger.js'; //shorthand loggers
+import { logToConsole as lg } from './logger.js'; //shorthand loggers
 
 //node creation fn
 const makeNode = (value = null, next = null)=> ( { value, next } );
@@ -106,7 +106,7 @@ const makeLinkedList = (head = null, tail = null)=> {
 
   // insert a new node at insertion index
   const insertAt = (value, insertIndex)=> {
-    lg( 'value to insert: ' + value );
+    lg( `value to insert: ${value}` );
     // throw error if the list does not have the indexed space created, like
     // trying to insert to 0 on an empty list, or to an index past the last index.
     if ( insertIndex < 0 || insertIndex >= getSize() ) {
