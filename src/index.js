@@ -1,6 +1,4 @@
 /* Next task:
-- implement:
-
 -linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
 
 */
@@ -65,7 +63,7 @@ const makeHashMap = ()=> {
     //if key exists, traverse to its node and return its value
     const bucketIndex = getHashCode(key, buckets.length);
     let currentNode = buckets[bucketIndex].getHead();
-    while ( currentNode ) { //simple linked list node traversal loop
+    while ( currentNode ) { //linked list node traversal loop
       if ( currentNode.value[0] === key ) {
         return currentNode.value[1];
       }
@@ -80,7 +78,7 @@ const makeHashMap = ()=> {
     const bucketIndex = getHashCode(key, buckets.length);
     let currentNode = buckets[bucketIndex].getHead();
     let currentIndex = 0;
-    while ( currentNode ) { //simple linked list node traversal loop
+    while ( currentNode ) { //linked list node traversal loop
       if ( currentNode.value[0] === key ) {
         //use linked list node removal method
         buckets[bucketIndex].removeAt(currentIndex);
@@ -109,6 +107,36 @@ const makeHashMap = ()=> {
   //fn to get array of all keys in hash map
   const keys = ()=> Array.from( keySet.values() );
 
+  //fn to get array of all values in hash map
+  const values = ()=> {
+    const valuesArr = [];
+    let currentNode;
+    //iterate over all buckets to get values of linked list nodes
+    buckets.forEach( (linkedList)=> { //cb is not invoked for empty slots in array
+      currentNode = linkedList.getHead();
+      while ( currentNode ) { // linked list node traversal loop
+        valuesArr.push( currentNode.value[1] );
+        currentNode = currentNode.next;
+      }
+    } );
+    return valuesArr;
+  };
+
+  //fn to get array of all key-value pair entries in hash map
+  const entries = ()=> {
+    const entriesArr = [];
+    let currentNode;
+    //iterate over all buckets to get values of linked list nodes
+    buckets.forEach( (linkedList)=> { //cb is not invoked for empty slots in array
+      currentNode = linkedList.getHead();
+      while ( currentNode ) { // linked list node traversal loop
+        entriesArr.push( currentNode.value );
+        currentNode = currentNode.next;
+      }
+    } );
+    return entriesArr;
+  };
+
   //basic visualization fn
   const visualizeHashMap = ()=> {
     lg('\n\nhashmap visualization: ');
@@ -131,6 +159,8 @@ const makeHashMap = ()=> {
     length,
     clear,
     keys,
+    values,
+    entries,
   };
 };
 
@@ -187,3 +217,7 @@ lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
 // namesAndCartItemsHashMap.clear(); //remove all hash map entries
 //get array of hash map keys
 // lg( namesAndCartItemsHashMap.keys() );
+//get array of all hash map values
+// lg( namesAndCartItemsHashMap.values() );
+//get array of all key-value pair entries
+// lg( namesAndCartItemsHashMap.entries() );
