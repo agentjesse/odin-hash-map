@@ -99,6 +99,13 @@ const makeHashMap = ()=> {
   //fn to return total keys in hash map
   const length = ()=> keySet.size;
 
+  //fn to remove all entries from the hash map ...and reset to 16 slot array
+  const clear = ()=> {
+    buckets = new Array(16);
+    keySet.clear();
+    lg( '* hash map cleared *' );
+  };
+
   //basic visualization fn
   const visualizeHashMap = ()=> {
     lg('\n\nhashmap visualization: ');
@@ -119,6 +126,7 @@ const makeHashMap = ()=> {
     has,
     remove,
     length,
+    clear,
   };
 };
 
@@ -172,3 +180,4 @@ lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
 lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
 lg( `Entry for Olivia Davis key removed from hash map?: ${ namesAndCartItemsHashMap.remove('Olivia Davis') }` );
 lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
+// namesAndCartItemsHashMap.clear();
