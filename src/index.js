@@ -1,5 +1,5 @@
 /* Next task:
--linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
+-linked lists are too large, need to implement array growth via comparing 0.75 load factor and bucket fullness.
 
 */
 
@@ -26,7 +26,7 @@ const makeHashMap = ()=> {
   //start with default size of 16 buckets. todo: implement array growth
   let buckets = new Array(16); //or use Array.from() for mapping fn if needed
   const keySet = new Set();
-  const loadFactor = 0.75; //for todo above
+  const loadFactor = 0.75;
 
   //fn to set key-value pair in bucket
   const set = (key, value)=> {
