@@ -1,5 +1,5 @@
 /* Next task:
--
+- implement get(key) fn
 
 -linked lists are too large, need to implement array growth via 0.75 load factor and bucket fullness.
 
@@ -35,10 +35,10 @@ const makeHashMap = ()=> {
     const bucketIndex = getHashCode(key, buckets.length);
     // lg( `bucketIndex: ${ bucketIndex }` );
 
-    //Check if key already exists
-    if ( keySet.has(key)) { //when key exists, get to entry node and update it's value
+    //Check if key already entered in hash map
+    if ( keySet.has(key)) { //if key exists, traverse to its node and update its value
       let currentNode = buckets[bucketIndex].getHead();
-      while ( currentNode ) {
+      while ( currentNode ) { //simple linked list node traversal loop
         if ( currentNode.value[0] === key ) {
           currentNode.value[1] = value;
           return;
@@ -59,8 +59,23 @@ const makeHashMap = ()=> {
 
   };
 
+  // fn to get value from key
+  const get = (key)=> {
+    //return early if key not in keySet
+    if ( !keySet.has(key) ) return null;
+    //if key exists, traverse to its node and return its value
+    const bucketIndex = getHashCode(key, buckets.length);
+    let currentNode = buckets[bucketIndex].getHead();
+    while ( currentNode ) { //simple linked list node traversal loop
+      if ( currentNode.value[0] === key ) {
+        return currentNode.value[1];
+      }
+      currentNode = currentNode.next;
+    }
+  };
+
   //basic visualization fn
-  const basicVisualization = ()=> {
+  const visualizeHashMap = ()=> {
     lg('\n\nhashmap visualization: ');
     for (let i = 0; i < buckets.length; i++) {
       if (buckets[i] !== undefined) {
@@ -73,8 +88,9 @@ const makeHashMap = ()=> {
 
   return {
     getBucketsArray: ()=> buckets,
+    visualizeHashMap,
     set,
-    basicVisualization,
+    get,
   };
 };
 
@@ -116,10 +132,13 @@ const namesAndCartItemsArr = [
 // lg( `'John Smith' hash: ${  getHashCode( namesAndCartItemsArr[0][0] )}` ); //hash fn test from string key
 // lg( getHashCode( 'JohnSmith' ) ); //hash fn test: no space
 // lg( getHashCode( 'SmithJohn' ) ); //hash fn test: permutation
-const namesAndCartItemsMap = makeHashMap();
+const namesAndCartItemsHashMap = makeHashMap();
 //set test data in hash map
 namesAndCartItemsArr.forEach( ([key, value])=> {
-  namesAndCartItemsMap.set( key, value );
+  namesAndCartItemsHashMap.set( key, value );
 } );
 //visualize hash map
-namesAndCartItemsMap.basicVisualization();
+namesAndCartItemsHashMap.visualizeHashMap();
+//get value of key Lucas Young
+lg( `Lucas Young's cart item: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
+//
