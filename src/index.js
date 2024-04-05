@@ -19,7 +19,7 @@ const getHashCode = (key, capacity)=> {
     //31 is odd prime number related to alphabet size
     hashCode = (31 * hashCode + key.charCodeAt(i)) % capacity;
   }
-  lg( `hashCode: ${ hashCode }` );
+  // lg( `hashCode: ${ hashCode }` );
   return hashCode;
 };
 
@@ -27,7 +27,7 @@ const getHashCode = (key, capacity)=> {
 const makeHashMap = ()=> {
   //start with default size of 16 buckets. todo: implement array growth
   let buckets = new Array(16); //or use Array.from() for mapping fn if needed
-  const loadFactor = 0.75;
+  const loadFactor = 0.75; //for todo above
 
   //fn to set key-value pair in bucket
   const set = (key, value)=> {
@@ -37,15 +37,40 @@ const makeHashMap = ()=> {
     //create or append linked list
     if ( buckets[bucketIndex] === undefined ) { //when bucket empty
       const newLinkedList = makeLinkedList(); //make linked list
-      newLinkedList.append( [key, value] ); //add key-value pair value node
+      newLinkedList.append( [key, value] ); //add node. value = key-value pair array
       buckets[bucketIndex] = newLinkedList;
-      // lg( `stored key-value pair in bucket: ${ bucketIndex }` );
+      // lg( `stored value in bucket: ${ bucketIndex }` );
+    } else { //when linked list already exists in bucket...
+      //handle collision by appending
+      //todo: need to handle updating old keys
+
+
+
+
+
+
+      
+      buckets[bucketIndex].append( [key, value] );
     }
 
   };
 
+  //basic visualization fn
+  const basicVisualization = ()=> {
+    lg('\n\nhashmap visualization: ');
+    for (let i = 0; i < buckets.length; i++) {
+      if (buckets[i] !== undefined) {
+        lg( buckets[i].toString() );
+      } else {
+        lg( 'empty bucket' );
+      }
+    }
+  };
+
   return {
+    getBucketsArray: ()=> buckets,
     set,
+    basicVisualization,
   };
 };
 
@@ -53,6 +78,7 @@ const makeHashMap = ()=> {
 //customer-item key-value pairs for testing:
 const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
+  ['John Smith', 'OVERWRITE_TEST'],
   ['Emily Johnson', 'Bottled Water'],
   ['Michael Williams', 'Rice'],
   ['Emma Jones', 'Chicken Breasts'],
@@ -87,10 +113,9 @@ const namesAndCartItemsArr = [
 // lg( getHashCode( 'JohnSmith' ) ); //hash fn test: no space
 // lg( getHashCode( 'SmithJohn' ) ); //hash fn test: permutation
 const namesAndCartItemsMap = makeHashMap();
-//set single entry in HashMap
-// namesAndCartItemsMap.set( namesAndCartItemsArr[0][0], namesAndCartItemsArr[0][1] );
-//set full data in Hash Map
+//set test data in hash map
 namesAndCartItemsArr.forEach( ([key, value])=> {
   namesAndCartItemsMap.set( key, value );
 } );
-lg( namesAndCartItemsMap );
+//visualize hash map
+namesAndCartItemsMap.basicVisualization();
