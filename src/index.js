@@ -1,5 +1,5 @@
 /* Next task:
--linked lists are too large, need to implement array growth via comparing 0.75 load factor and bucket fullness.
+-
 
 */
 
@@ -12,6 +12,7 @@ import makeLinkedList from './linkedList.js'; //default import example
 //capacity here to use the modulo operator in each loop; this keeps the numbers small
 //for JS accuracy and also prevents them ever being more than capacity.
 const getHashCode = (key, capacity)=> {
+  // if (typeof key !== 'string') { lg( key ); throw new Error('111... Key must be a string.'); }
   let hashCode = 0;
   for ( let i = 0; i < key.length; i++ ) {
     //31 is odd prime number related to alphabet size
@@ -23,16 +24,17 @@ const getHashCode = (key, capacity)=> {
 
 //hashmap creation factory fn, yay no overthinking 'this'.
 const makeHashMap = ()=> {
-  //start with default size of 16 buckets. todo: implement array growth
-  let buckets = new Array(16); //or use Array.from() for mapping fn if needed
+  //start with default size of 16 buckets.
+  let currentBucketSize = 16;
+  // let currentBucketSize = 2; //use this smaller size for debugging
+  let buckets = new Array( currentBucketSize ); //or use Array.from() for mapping fn if needed
   const keySet = new Set();
   const loadFactor = 0.75;
 
-  //fn to set key-value pair in bucket
+  //fn to set key-value pair arr value in bucket within a node
   const set = (key, value)=> {
-    const bucketIndex = getHashCode(key, buckets.length);
-    // lg( `bucketIndex: ${ bucketIndex }` );
-
+    if (typeof value !== 'string') { lg( value ); throw new Error('111... Value must be a string.'); }
+    let bucketIndex = getHashCode(key, buckets.length);
     //Check if key already entered in hash map
     if ( keySet.has(key)) { //if key exists, traverse to its node and update its value
       let currentNode = buckets[bucketIndex].getHead();
@@ -43,18 +45,50 @@ const makeHashMap = ()=> {
         }
         currentNode = currentNode.next;
       }
-    } else { //new keys: create new entry and key in keySet
+    } else { //new key: add new entry to hash map and key to keySet Set
       keySet.add(key); //add key to set
-      //create or append linked list
+      //before checking load factor, set the value in the bucket
       if ( buckets[bucketIndex] === undefined ) { //when bucket empty
         const newLinkedList = makeLinkedList(); //make linked list
         newLinkedList.append( [key, value] ); //add node. value = key-value pair array
         buckets[bucketIndex] = newLinkedList;
-      } else { //handle collisions by appending
+      } else { //handle occupied bucket collisions by appending to their linked list
         buckets[bucketIndex].append( [key, value] );
       }
+      //now check load factor. if it has been passed, then rehash and insert existing
+      //entries to new buckets
+      if ( keySet.size / buckets.length > loadFactor ) {
+        lg(`loadfactor exceeded: copying entries to ${ currentBucketSize * 2
+        } new buckets...`);
+        //make temporary double size bucket array
+        currentBucketSize *= 2;
+        const tempDoubledBuckets = new Array( currentBucketSize );
+        //iterate over all old buckets to access values in linked list nodes
+        buckets.forEach( (linkedList)=> { //cb is not invoked for empty bucket array slots
+          let currentNode = linkedList.getHead();
+          while ( currentNode ) { // linked list node traversal loop
+            //hash key and calculate index to store in doubled bucket array
+            if (typeof currentNode.value[0] !== 'string') { //debugging
+              lg( currentNode.value[0] );
+              throw new Error('333... Key must be a string.');
+            }
+            bucketIndex = getHashCode( currentNode.value[0], tempDoubledBuckets.length );
+            //if bucket is empty, create linked list
+            if ( tempDoubledBuckets[bucketIndex] === undefined ) {
+              const newLinkedList = makeLinkedList();
+              //add node to list with value from old node, which is the key-value pair ARRAY
+              //you had a bug before here where the value was an array inside another array.
+              newLinkedList.append( currentNode.value );
+              tempDoubledBuckets[bucketIndex] = newLinkedList;
+            } else { //handle collisions by appending a new node
+              tempDoubledBuckets[bucketIndex].append( currentNode.value );
+            }
+            currentNode = currentNode.next;
+          }
+        } );
+        buckets = tempDoubledBuckets; //swap buckets
+      }
     }
-
   };
 
   // fn to get value from key
@@ -171,6 +205,8 @@ const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
   ['Emily Johnson', 'Bottled Water'],
   ['Michael Williams', 'Rice'],
+  ['David Jackson', 'Pasta'],
+  ['David Jackson', 'UPDATE_OVERWRITE_TEST_VALUE'],
   ['Emma Jones', 'Chicken Breasts'],
   ['James Brown', 'Cereal'],
   ['Olivia Davis', 'Bananas'],
@@ -180,8 +216,6 @@ const namesAndCartItemsArr = [
   ['Isabella Taylor', 'Spinach'],
   ['Daniel Anderson', 'Cheese'],
   ['Mia Thomas', 'Bread'],
-  ['David Jackson', 'Pasta'],
-  ['David Jackson', 'UPDATE_OVERWRITE_TEST_VALUE'],
   ['Ava White', 'Tomatoes'],
   ['Joseph Harris', 'Ground Beef'],
   ['Charlotte Martinez', 'Coffee'],
@@ -200,7 +234,8 @@ const namesAndCartItemsArr = [
   ['Evelyn King', 'Broccoli'],
   ['Jackson Scott', 'Ground Turkey']
 ];
-// lg( `'John Smith' hash: ${  getHashCode( namesAndCartItemsArr[0][0] )}` ); //hash fn test from string key
+//hash fn test from string key with starting capacity of 16
+// lg( `'John Smith' hash: ${ getHashCode( namesAndCartItemsArr[0][0], 16 )}` );
 // lg( getHashCode( 'JohnSmith' ) ); //hash fn test: no space
 // lg( getHashCode( 'SmithJohn' ) ); //hash fn test: permutation
 const namesAndCartItemsHashMap = makeHashMap();
@@ -210,9 +245,10 @@ namesAndCartItemsArr.forEach( ([key, value])=> {
 } );
 //visualize hash map
 namesAndCartItemsHashMap.visualizeHashMap();
-lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
-lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
-lg( `Entry for Olivia Davis key removed from hash map?: ${ namesAndCartItemsHashMap.remove('Olivia Davis') }` );
+// lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
+// lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
+// lg( `Entry for Olivia Davis key removed from hash map?: ${
+//   namesAndCartItemsHashMap.remove('Olivia Davis') }` );
 lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
 // namesAndCartItemsHashMap.clear(); //remove all hash map entries
 //get array of hash map keys
