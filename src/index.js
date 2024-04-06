@@ -14,8 +14,9 @@ const getHashCode = (key, capacity)=> {
   // if (typeof key !== 'string') { lg( key ); throw new Error('111... Key must be a string.'); }
   let hashCode = 0;
   for ( let i = 0; i < key.length; i++ ) {
-    //31 is odd prime number related to alphabet size
-    hashCode = (31 * hashCode + key.charCodeAt(i)) % capacity;
+    //31 is a common odd prime number related to alphabet size used in hashing functions
+    //can also try changing it to another prime number. popular: 17,31,37,41
+    hashCode = (17 * hashCode + key.charCodeAt(i)) % capacity;
   }
   // lg( `hashCode: ${ hashCode }` );
   //test hashcodes are within bounds before returning them
@@ -254,3 +255,44 @@ lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
 // lg( namesAndCartItemsHashMap.values() );
 //get array of all hash map entries, which are key-value pair arrays
 // lg( namesAndCartItemsHashMap.entries() );
+
+//******* EXTRA CREDIT hash set factory fn below. JS Set object alternative*******
+const makeHashSet = ()=> {
+  let set = {}; //based off object to store keys
+  //fn to store key as a property with truthy value
+  const add = (key)=> { set[key] = true; };
+  //fn to check if key exists in the set, use double negation operator to return
+  //a boolean based on key's existence in the set
+  const has = (key)=> !!set[key];
+  //fn to remove key from the set by deleting its property
+  const remove = (key)=> { delete set[key]; };
+  //fn to remove all keys from the set via reassignment
+  const clear = ()=> { set = {}; };
+  //fn to return the number of keys in the set
+  const size = ()=> Object.keys(set).length;
+  //fn to return an array of all keys in the set
+  const keys = () => Object.keys(set);
+  return {
+    add,
+    has,
+    remove,
+    clear,
+    size,
+    keys,
+  };
+};
+// hash set testing
+// const fruitsHashSet = makeHashSet();
+// add keys to the set
+// fruitsHashSet.add('apple');
+// fruitsHashSet.add('banana');
+// fruitsHashSet.add('orange');
+// Check if keys exist in the set
+// lg(fruitsHashSet.has('banana'));
+// lg(fruitsHashSet.has('grape'));
+// Remove a key from the set
+// fruitsHashSet.remove('banana');
+// Clear the set, check it's empty
+// fruitsHashSet.clear();
+// lg(fruitsHashSet.size());
+// lg(fruitsHashSet.keys());
