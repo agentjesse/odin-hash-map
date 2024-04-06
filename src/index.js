@@ -1,6 +1,5 @@
 /* Next task:
 -
-
 */
 
 //Imports
@@ -203,7 +202,7 @@ const makeHashMap = ()=> {
 
 //-----------testing
 //customer-item key-value pairs for testing:
-//30 + 1 for overwrite / update set() testing
+//24 normal + 1 to test overwrite
 const namesAndCartItemsArr = [
   ['John Smith', 'Toilet Paper'],
   ['Emily Johnson', 'Bottled Water'],
