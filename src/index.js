@@ -19,12 +19,15 @@ const getHashCode = (key, capacity)=> {
     hashCode = (31 * hashCode + key.charCodeAt(i)) % capacity;
   }
   // lg( `hashCode: ${ hashCode }` );
+  //test hashcodes are within bounds before returning them
+  if ( hashCode < 0 || hashCode >= capacity ) throw new Error('hash has led to an index out of bounds');
   return hashCode;
 };
 
 //hashmap creation factory fn, yay no overthinking 'this'.
 const makeHashMap = ()=> {
-  //start with default size of 16 buckets.
+  //start with a default array of size 16 for the buckets. JS let's you write values
+  // wherever you want in arrays, but not all programming languages will.
   let currentBucketSize = 16;
   // let currentBucketSize = 2; //use this smaller size for debugging
   let buckets = new Array( currentBucketSize ); //or use Array.from() for mapping fn if needed
@@ -206,7 +209,7 @@ const namesAndCartItemsArr = [
   ['Emily Johnson', 'Bottled Water'],
   ['Michael Williams', 'Rice'],
   ['David Jackson', 'Pasta'],
-  ['David Jackson', 'UPDATE_OVERWRITE_TEST_VALUE'],
+  ['David Jackson', 'UPDATE_OVERWRITE_TEST'],
   ['Emma Jones', 'Chicken Breasts'],
   ['Olivia Davis', 'Bananas'],
   ['Ava White', 'Tomatoes'],
@@ -240,15 +243,15 @@ namesAndCartItemsArr.forEach( ([key, value])=> {
 } );
 //visualize hash map
 namesAndCartItemsHashMap.visualizeHashMap();
-// lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Emily Johnson')}` );
+// lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
 // lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
 // lg( `Entry for Olivia Davis key removed from hash map?: ${
-//   namesAndCartItemsHashMap.remove('Olivia Davis') }` );
+  // namesAndCartItemsHashMap.remove('Olivia Davis') }` );
 // namesAndCartItemsHashMap.clear(); //remove all hash map entries
 lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
-//get array of all hash map keys
+// get array of all hash map keys
 // lg( namesAndCartItemsHashMap.keys() );
-//get array of all hash map values
+// get array of all hash map values
 // lg( namesAndCartItemsHashMap.values() );
 //get array of all hash map entries, which are key-value pair arrays
 // lg( namesAndCartItemsHashMap.entries() );
