@@ -208,32 +208,27 @@ const namesAndCartItemsArr = [
   ['David Jackson', 'Pasta'],
   ['David Jackson', 'UPDATE_OVERWRITE_TEST_VALUE'],
   ['Emma Jones', 'Chicken Breasts'],
-  ['James Brown', 'Cereal'],
   ['Olivia Davis', 'Bananas'],
-  ['William Miller', 'Apples'],
-  ['Sophia Wilson', 'Milk'],
-  ['Alexander Moore', 'Eggs'],
-  ['Isabella Taylor', 'Spinach'],
-  ['Daniel Anderson', 'Cheese'],
-  ['Mia Thomas', 'Bread'],
   ['Ava White', 'Tomatoes'],
-  ['Joseph Harris', 'Ground Beef'],
   ['Charlotte Martinez', 'Coffee'],
-  ['Matthew Thompson', 'Frozen Pizza'],
   ['Amelia Garcia', 'Paper Towels'],
-  ['Samuel Robinson', 'Orange Juice'],
   ['Ella Lee', 'Salmon'],
-  ['Benjamin Clark', 'Yogurt'],
   ['Lily Rodriguez', 'Avocado'],
   ['Christopher Lewis', 'Potatoes'],
   ['Grace Walker', 'Cucumber'],
   ['Andrew Hall', 'Onions'],
-  ['Madison Allen', 'Lettuce'],
   ['Lucas Young', 'Peanut Butter'],
-  ['Avery Wright', 'Ice Cream'],
   ['Evelyn King', 'Broccoli'],
-  ['Jackson Scott', 'Ground Turkey']
+  ['Jackson Scott', 'Ground Turkey'],
+  ['Priya Patel', 'Curry'],
+  ['Luis Hernandez', 'Tortillas'],
+  ['Sven Olsen', 'Smorrebrod'],
+  ['Chen Wei', 'Noodles'],
+  ['Ananya Gupta', 'Chutney'],
+  ['Muhammad Khan', 'Kebab'],
+  ['Santiago Rodriguez', 'Empanadas']
 ];
+
 //hash fn test from string key with starting capacity of 16
 // lg( `'John Smith' hash: ${ getHashCode( namesAndCartItemsArr[0][0], 16 )}` );
 // lg( getHashCode( 'JohnSmith' ) ); //hash fn test: no space
@@ -245,15 +240,15 @@ namesAndCartItemsArr.forEach( ([key, value])=> {
 } );
 //visualize hash map
 namesAndCartItemsHashMap.visualizeHashMap();
-// lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Lucas Young')}` );
+// lg( `Lucas Young key's value: ${namesAndCartItemsHashMap.get('Emily Johnson')}` );
 // lg( `Ava white key in hash map?: ${ namesAndCartItemsHashMap.has('Ava White') }` );
 // lg( `Entry for Olivia Davis key removed from hash map?: ${
 //   namesAndCartItemsHashMap.remove('Olivia Davis') }` );
-lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
 // namesAndCartItemsHashMap.clear(); //remove all hash map entries
-//get array of hash map keys
+lg( `total keys in hash map: ${namesAndCartItemsHashMap.length()}` );
+//get array of all hash map keys
 // lg( namesAndCartItemsHashMap.keys() );
 //get array of all hash map values
 // lg( namesAndCartItemsHashMap.values() );
-//get array of all key-value pair entries
+//get array of all hash map entries, which are key-value pair arrays
 // lg( namesAndCartItemsHashMap.entries() );
