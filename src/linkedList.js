@@ -23,10 +23,15 @@ const makeLinkedList = (head = null, tail = null)=> {
 
   //fn to add node at beginning of list
   const prepend = (value)=> {
-    //new node at head
-    const newHead = makeNode(value);
-    newHead.next = head;
-    head = newHead;
+    //handle empty list
+    if ( !head ) {
+      head = makeNode(value);
+      tail = head;
+    } else { //make, set new head node
+      const newHead = makeNode(value);
+      newHead.next = head;
+      head = newHead;
+    }
     currentSize++;
   };
 
@@ -44,11 +49,13 @@ const makeLinkedList = (head = null, tail = null)=> {
   //NEW MEMOIZATION CODE: fn to return amount of nodes in list.
   const getSize = ()=> currentSize;
 
-  //fn to get node from an index
-  const at = (index)=> {
+  //fn to get node from an index. optionally provide boolean for skipValidation for internal invocations
+  const at = (index, skipValidation)=> {
     let currentNode = head;
-    if ( index < 0 || index >= getSize() ) {
-      throw new Error('Index outside list bounds [list is zero-indexed]');
+    if (!skipValidation) {
+      if ( index < 0 || index >= getSize() ) {
+        throw new Error('Index outside list bounds [list is zero-indexed]');
+      }
     }
     for ( let currentIndex = 0; currentIndex <= index; currentIndex++ ) {
       if ( currentIndex === index) return currentNode;
@@ -80,7 +87,9 @@ const makeLinkedList = (head = null, tail = null)=> {
     currentSize--;
   };
 
-  //fn to check if a value is in the list
+  /*
+
+  //fn to check if a value is in the list, not needed, just check if findIndex returns an index
   const contains = (value)=> {
     //traverse and compare
     let currentNode = head;
@@ -91,7 +100,10 @@ const makeLinkedList = (head = null, tail = null)=> {
     return false;//when value not in list
   };
 
-  // given a value, get the index of the node if value exists in list
+  */
+
+  // given a value, get the index of the node if value exists in list. use instead of
+  //contains method above, since null returned when no node with value found in list
   const findIndex = (value)=> {
     //travese, compare, save index
     let index = 0;
@@ -120,16 +132,16 @@ const makeLinkedList = (head = null, tail = null)=> {
       return;
     }
     //handle insertion at index within list after head
-    const nextNode = at(insertIndex);
-    const previousNode = at(insertIndex - 1);
+    const previousNode = at(insertIndex - 1, true);//skips validation in at()
+    const nextNode = previousNode.next.next;
     //create new node with value and the nextNode
     previousNode.next = makeNode(value, nextNode);
     currentSize++;
   };
 
-  // remove node at index
+  // remove node at index, return it's value
   const removeAt = (removalIndex)=> {
-    // lg( 'index of node to remove: ' + removalIndex );
+    // lg( `index of node to remove: ${removalIndex}` );
     // throw error if the list does not have the indexed space created, like
     // trying to remove 0 on an empty list, or to an index past the last index.
     if ( removalIndex < 0 || removalIndex >= getSize() ) {
@@ -137,18 +149,22 @@ const makeLinkedList = (head = null, tail = null)=> {
         getSize() === 0 ? 'true' : 'false'
       })`);
     }
+    let returnVal;
     // handle node removal at head
     if ( removalIndex === 0 ) {
+      returnVal = head.value;
       head = head.next;
       currentSize--;
-      return;
+      return returnVal;
     }
     //handle removal at index within list after head
-    const nextNode = at(removalIndex).next;
-    const previousNode = at(removalIndex - 1);
+    const previousNode = at(removalIndex - 1, true); //skips validation in at()
+    returnVal = previousNode.next.value;
+    const nextNode = previousNode.next.next;
     //connect nodes together
     previousNode.next = nextNode;
     currentSize--;
+    return returnVal;
   };
 
   const toString = ()=> {
@@ -175,14 +191,13 @@ const makeLinkedList = (head = null, tail = null)=> {
     getSize,
     at,
     pop,
-    contains,
+    // contains, //use findIndex
     findIndex,
     toString,
     insertAt,
     removeAt,
   };
 };
-
 export default makeLinkedList;
 
 /*
